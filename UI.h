@@ -14,24 +14,10 @@
 const int ID_BUTTON_CLICKME = 101;
 const int ID_BUTTON_GETIP   = 102;
 
+// #include "MySocket.h"
+// #include "server.h"
 
 
-MyFrame::MyFrame() 
-    : wxFrame(nullptr, wxID_ANY, "Модульное приложение", wxDefaultPosition, wxSize(800, 600)) 
-{
-    // Главный контейнер всего окна
-    wxBoxSizer* mainSizer = new wxBoxSizer(wxHORIZONTAL);
-
-    // Просто создаем наши кастомные компоненты, передавая 'this' как родителя
-    m_panel1 = new Panel_1(this);
-    m_panel2 = new Panel_2(this);
-
-    // Компонуем их: сайдбар фиксированный (0), холст растягивается на весь экран (1)
-    mainSizer->Add(m_panel1, 0, wxEXPAND | wxRIGHT, 2);
-    mainSizer->Add(m_panel2, 1, wxEXPAND);
-
-    SetSizer(mainSizer);
-}
 
 
 // Panel_1.h
@@ -43,33 +29,47 @@ public:
         m_Label1  = new wxStaticText(this, wxID_ANY, "Waiting for action...", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
         m_button_ShowLabel1 = new wxButton(this, ID_BUTTON_CLICKME, "Click Me", wxDefaultPosition, wxSize(200, 40));
         
-        sizer->Add(m_button_show_label1, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
-        sizer->Add(m_label1, 0, wxALL | wxEXPAND, 20);
+        sizer->Add(m_button_ShowLabel1, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
+        sizer->Add(m_Label1, 0, wxALL | wxEXPAND, 20);
         
         SetSizer(sizer);
         
         // Привязываем события внутри этого же класса
         // m_btnOpen->Bind(wxEVT_BUTTON, &SidebarPanel::OnOpenPressed, this);
-        m_button_ShowLabel1->Bind(wxEVT_BUTTON, &Panel_1::OnMyButtonClicked, this, ID_BUTTON_CLICKME);
+        // m_button_ShowLabel1->Bind(wxEVT_BUTTON, &Panel_1::OnMyButtonClicked, this, ID_BUTTON_CLICKME);
 
     }
+    wxButton* GetEventButton() const { return m_button_ShowLabel1; };
+    int RenderState(const wxString& message);
+    int ShowText(const wxString& message);
 
 private:
     wxStaticText* m_Label1;
     wxButton*     m_button_ShowLabel1;
 
-    // ----------------------------------------------------------------
-    // FUNCTIONALITY 1:
-    // ----------------------------------------------------------------
-    void Panel_1::OnMyButtonClicked(wxCommandEvent& event)
+    // void Panel_1::OnMyButtonClicked(wxCommandEvent& event)
+    void OnMyButtonClicked(wxCommandEvent& event)
     {
         // Put whatever you want your app to do when the button is pressed
         // For example, change the text of our label:
-        m_label1->SetLabel("Hello! Your custom wxWidgets code ran adfdfa.");
+        m_Label1->SetLabel("Hello! Your custom wxWidgets code ran adfdfa.");
 
         // internet_connection->SendData();
 
     };
+};
+int Panel_1::RenderState(const wxString& message) 
+{
+    this->ShowText(message);
+    this->Layout();
+    return 0;
+};
+int Panel_1::ShowText(const wxString& message) 
+{
+    // this.m_Label1->SetLabel("Hello! Your custom wxWidgets code ran adfdfa.");
+    this->m_Label1->SetLabel(message);
+    this->Layout();
+    return 0;
 };
 
 
@@ -83,24 +83,24 @@ public:
         m_label_get_IP  = new wxStaticText(this, wxID_ANY, "Result: (IP of server)", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
         m_button_get_IP = new wxButton(this, ID_BUTTON_GETIP, "Get IP", wxDefaultPosition, wxSize(200, 40));
 
-        sizer->Add(m_button_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
         sizer->Add(m_label_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
+        sizer->Add(m_button_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
+
         
         SetSizer(sizer);
   
         // Привязываем события внутри этого же класса
         // m_btnOpen->Bind(wxEVT_BUTTON, &SidebarPanel::OnOpenPressed, this);
-        m_button_get_IP->Bind(wxEVT_BUTTON, &Panel_2::OnMyButtonClicked, this, ID_BUTTON_CLICKME);
-    }
+        // m_button_get_IP->Bind(wxEVT_BUTTON, &Panel_2::OnMyButtonGetIP, this, ID_BUTTON_GETIP);
+    };
+
+    wxButton* GetEventButton() const { return m_button_get_IP; };
 
 private:
     wxStaticText* m_label_get_IP;
     wxButton*     m_button_get_IP;
 
-    // ----------------------------------------------------------------
-    // FUNCTIONALITY 2:
-    // ----------------------------------------------------------------
-    void Panel_2::OnMyButtonGetIP(wxCommandEvent& event)
+    void OnMyButtonGetIP(wxCommandEvent& event)
     {
         // Put whatever you want your app to do when the button is pressed
         // For example, change the text of our label:
@@ -112,67 +112,135 @@ private:
         std::cout << "OnMyButtonGetIP." << std::endl;
 
     };
-
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// SidebarPanel.h
-class SidebarPanel : public wxPanel {
+// Panel_3.h
+class Panel_3 : public wxPanel {
 public:
-    SidebarPanel(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
+    Panel_3(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-        
-        m_btnOpen = new wxButton(this, wxID_ANY, "Открыть");
-        m_btnSave = new wxButton(this, wxID_ANY, "Сохранить");
-        
-        sizer->Add(m_btnOpen, 0, wxALL | wxEXPAND, 5);
-        sizer->Add(m_btnSave, 0, wxALL | wxEXPAND, 5);
+
+        // FUNCTIONALITY 2
+        m_label_get_IP  = new wxStaticText(this, wxID_ANY, "Result: (IP of server)", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
+        m_button_get_IP = new wxButton(this, ID_BUTTON_GETIP, "Get IP", wxDefaultPosition, wxSize(200, 40));
+
+        sizer->Add(m_button_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
+        sizer->Add(m_label_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
         
         SetSizer(sizer);
-        
+  
         // Привязываем события внутри этого же класса
-        m_btnOpen->Bind(wxEVT_BUTTON, &SidebarPanel::OnOpenPressed, this);
+        // m_btnOpen->Bind(wxEVT_BUTTON, &SidebarPanel::OnOpenPressed, this);
+        m_button_get_IP->Bind(wxEVT_BUTTON, &Panel_3::OnMyButtonGetIP, this, ID_BUTTON_GETIP);
     }
 
 private:
-    wxButton* m_btnOpen;
-    wxButton* m_btnSave;
+    wxStaticText* m_label_get_IP;
+    wxButton*     m_button_get_IP;
 
-    void OnOpenPressed(wxCommandEvent& event) {
-        // Логика кнопки "Открыть" инкапсулирована здесь
-    }
+    void OnMyButtonGetIP(wxCommandEvent& event)
+    {
+        // Put whatever you want your app to do when the button is pressed
+        // For example, change the text of our label:
+        // m_label1->SetLabel("Hello! Your custom wxWidgets code ran adfdfa.");
+
+        // internet_connection->Get_IP();
+        // internet_connection->CloseConnection();
+
+        std::cout << "OnMyButtonGetIP." << std::endl;
+
+    };
 };
 
 
 
 
 
-// RenderCanvas.h
-class RenderCanvas : public wxPanel {
-public:
-    RenderCanvas(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
-        SetBackgroundColour(*wxBLACK);
-        Bind(wxEVT_PAINT, &RenderCanvas::OnPaint, this);
-    }
-private:
-    void OnPaint(wxPaintEvent& event) {
-        wxPaintDC dc(this);
-        // Тут логика рисования
-    }
-};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // SidebarPanel.h
+// class SidebarPanel : public wxPanel {
+// public:
+//     SidebarPanel(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
+//         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+        
+//         m_btnOpen = new wxButton(this, wxID_ANY, "Открыть");
+//         m_btnSave = new wxButton(this, wxID_ANY, "Сохранить");
+        
+//         sizer->Add(m_btnOpen, 0, wxALL | wxEXPAND, 5);
+//         sizer->Add(m_btnSave, 0, wxALL | wxEXPAND, 5);
+        
+//         SetSizer(sizer);
+        
+//         // Привязываем события внутри этого же класса
+//         m_btnOpen->Bind(wxEVT_BUTTON, &SidebarPanel::OnOpenPressed, this);
+//     }
+
+// private:
+//     wxButton* m_btnOpen;
+//     wxButton* m_btnSave;
+
+//     void OnOpenPressed(wxCommandEvent& event) {
+//         // Логика кнопки "Открыть" инкапсулирована здесь
+//     }
+// };
+
+
+
+
+
+// // RenderCanvas.h
+// class RenderCanvas : public wxPanel {
+// public:
+//     RenderCanvas(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
+//         SetBackgroundColour(*wxBLACK);
+//         Bind(wxEVT_PAINT, &RenderCanvas::OnPaint, this);
+//     }
+// private:
+//     void OnPaint(wxPaintEvent& event) {
+//         wxPaintDC dc(this);
+//         // Тут логика рисования
+//     }
+// };
