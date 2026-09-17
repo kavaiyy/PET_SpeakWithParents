@@ -59,6 +59,11 @@ public:
         std::cout << "Успешно подключено к серверу!" << std::endl;
 
     };
+    ~SocketConnection()
+    {
+        std::cout << "Destructor: SocketConnection object.\n";
+        close(sock);
+    }
 
     int SendData()
     {
