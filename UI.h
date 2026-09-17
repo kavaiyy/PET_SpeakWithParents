@@ -8,14 +8,19 @@
 #include <cstring>
 #include <unistd.h>
 
+
+
+// #include "MySocket.h"
+// #include "server.h"
+
+
 // ============================================================================
 // 1. CHOOSE AN ID FOR THE BUTTON
 // ============================================================================
 const int ID_BUTTON_CLICKME = 101;
 const int ID_BUTTON_GETIP   = 102;
 
-// #include "MySocket.h"
-// #include "server.h"
+
 
 
 
@@ -25,13 +30,13 @@ class Panel_1 : public wxPanel {
 public:
     Panel_1(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-        
+
         m_Label1  = new wxStaticText(this, wxID_ANY, "Waiting for action...", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
-        m_button_ShowLabel1 = new wxButton(this, ID_BUTTON_CLICKME, "Click Me", wxDefaultPosition, wxSize(200, 40));
-        
-        sizer->Add(m_button_ShowLabel1, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
         sizer->Add(m_Label1, 0, wxALL | wxEXPAND, 20);
-        
+
+        m_button_ShowLabel1 = new wxButton(this, ID_BUTTON_CLICKME, "Click Me", wxDefaultPosition, wxSize(200, 40));
+        sizer->Add(m_button_ShowLabel1, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
+
         SetSizer(sizer);
         
         // Привязываем события внутри этого же класса
@@ -46,6 +51,7 @@ public:
 private:
     wxStaticText* m_Label1;
     wxButton*     m_button_ShowLabel1;
+
 
     // void Panel_1::OnMyButtonClicked(wxCommandEvent& event)
     void OnMyButtonClicked(wxCommandEvent& event)
@@ -73,6 +79,13 @@ int Panel_1::ShowText(const wxString& message)
 };
 
 
+
+
+
+
+
+
+
 // Panel_2.h
 class Panel_2 : public wxPanel {
 public:
@@ -81,17 +94,13 @@ public:
 
         // FUNCTIONALITY 2
         m_label_get_IP  = new wxStaticText(this, wxID_ANY, "Result: (IP of server)", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
-        m_button_get_IP = new wxButton(this, ID_BUTTON_GETIP, "Get IP", wxDefaultPosition, wxSize(200, 40));
-
         sizer->Add(m_label_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
+        
+        m_button_get_IP = new wxButton(this, ID_BUTTON_GETIP, "Get IP", wxDefaultPosition, wxSize(200, 40));
         sizer->Add(m_button_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
 
-        
         SetSizer(sizer);
-  
-        // Привязываем события внутри этого же класса
-        // m_btnOpen->Bind(wxEVT_BUTTON, &SidebarPanel::OnOpenPressed, this);
-        // m_button_get_IP->Bind(wxEVT_BUTTON, &Panel_2::OnMyButtonGetIP, this, ID_BUTTON_GETIP);
+
     };
 
     wxButton* GetEventButton() const { return m_button_get_IP; };
@@ -102,54 +111,46 @@ private:
 
     void OnMyButtonGetIP(wxCommandEvent& event)
     {
-        // Put whatever you want your app to do when the button is pressed
-        // For example, change the text of our label:
-        // m_label1->SetLabel("Hello! Your custom wxWidgets code ran adfdfa.");
-
-        // internet_connection->Get_IP();
-        // internet_connection->CloseConnection();
-
         std::cout << "OnMyButtonGetIP." << std::endl;
-
     };
 };
-
 
 // Panel_3.h
 class Panel_3 : public wxPanel {
 public:
     Panel_3(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
-        wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+        wxBoxSizer* PanelSizer = new wxBoxSizer(wxVERTICAL);
 
-        // FUNCTIONALITY 2
-        m_label_get_IP  = new wxStaticText(this, wxID_ANY, "Result: (IP of server)", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
-        m_button_get_IP = new wxButton(this, ID_BUTTON_GETIP, "Get IP", wxDefaultPosition, wxSize(200, 40));
+        // FUNCTIONALITY 3
+        // 1. Метка-подсказка
+        m_label_1 = new wxStaticText(this, wxID_ANY, "Введите текст:");
+        PanelSizer->Add(m_label_1, 0, wxALL | wxALIGN_LEFT, 10);
 
-        sizer->Add(m_button_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
-        sizer->Add(m_label_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
-        
-        SetSizer(sizer);
-  
-        // Привязываем события внутри этого же класса
-        // m_btnOpen->Bind(wxEVT_BUTTON, &SidebarPanel::OnOpenPressed, this);
-        m_button_get_IP->Bind(wxEVT_BUTTON, &Panel_3::OnMyButtonGetIP, this, ID_BUTTON_GETIP);
-    }
+        // 2. Поле ввода текста (wxTextCtrl)
+        // Флаг wxTE_PROCESS_ENTER критически важен, чтобы работало нажатие Enter!
+        m_textInput = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+        PanelSizer->Add(m_textInput, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+        // m_textInput->Bind(wxEVT_TEXT_ENTER, &MyFrame::OnEnterPressed, this);
+
+        // 3. Кнопка отправки
+        m_submitButton = new wxButton(this, wxID_ANY, "Отправить");
+        PanelSizer->Add(m_submitButton, 0, wxALL | wxALIGN_CENTER, 10);
+        // m_submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnSubmitPressed, this);
+
+        SetSizer(PanelSizer);
+        this->Layout();
+    };
+
+    wxButton* GetEventButton() const { return m_submitButton; };
 
 private:
-    wxStaticText* m_label_get_IP;
-    wxButton*     m_button_get_IP;
+    wxStaticText* m_label_1;
+    wxTextCtrl*   m_textInput;
+    wxButton*     m_submitButton;
 
-    void OnMyButtonGetIP(wxCommandEvent& event)
+    void OnMyButtonSubmit(wxCommandEvent& event)
     {
-        // Put whatever you want your app to do when the button is pressed
-        // For example, change the text of our label:
-        // m_label1->SetLabel("Hello! Your custom wxWidgets code ran adfdfa.");
-
-        // internet_connection->Get_IP();
-        // internet_connection->CloseConnection();
-
-        std::cout << "OnMyButtonGetIP." << std::endl;
-
+        std::cout << "OnMyButtonSubmit." << std::endl;
     };
 };
 
@@ -161,6 +162,82 @@ private:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+// public:
+//     MyFrame() : wxFrame(nullptr, wxID_ANY, "Basic wxWidgets GUI App", wxPoint(50, 50), wxSize(400, 250))
+//     {
+//         // Layout manager to handle auto-positioning and resizing
+//         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+//         wxPanel* panel = new wxPanel(this, wxID_ANY);
+
+
+
+//         // FUNCTIONALITY 1
+//         m_label1             = new wxStaticText(this, wxID_ANY, "Waiting for action...", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
+//         m_button_show_label1 = new wxButton(this, ID_BUTTON_CLICKME, "Click Me", wxDefaultPosition, wxSize(200, 40));
+//         sizer->Add(m_button_show_label1, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
+//         sizer->Add(m_label1, 0, wxALL | wxEXPAND, 20);
+        
+//         // FUNCTIONALITY 2
+//         m_button_get_IP = new wxButton(this, ID_BUTTON_GETIP, "Get IP", wxDefaultPosition, wxSize(200, 40));
+//         m_label_get_IP  = new wxStaticText(this, wxID_ANY, "Result: (IP of server)", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
+//         sizer->Add(m_button_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
+//         sizer->Add(m_label_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
+
+
+// // -------------------------------------
+//         // FUNCTIONALITY 3
+
+//         // 1. Метка-подсказка
+//         wxBoxSizer* PanelSizer = new wxBoxSizer(wxVERTICAL);
+//         wxStaticText* label = new wxStaticText(panel, wxID_ANY, "Введите текст:");
+//         PanelSizer->Add(label, 0, wxALL | wxALIGN_LEFT, 10);
+
+//         // 2. Поле ввода текста (wxTextCtrl)
+//         // Флаг wxTE_PROCESS_ENTER критически важен, чтобы работало нажатие Enter!
+//         m_textInput = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+//         PanelSizer->Add(m_textInput, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+
+//         // 3. Кнопка отправки
+//         wxButton* submitButton = new wxButton(panel, wxID_ANY, "Отправить");
+//         PanelSizer->Add(submitButton, 0, wxALL | wxALIGN_CENTER, 10);
+
+//         panel->SetSizer(PanelSizer);
+
+//         // ============================================================================
+//         // ДИНАМИЧЕСКОЕ СВЯЗЫВАНИЕ СОБЫТИЙ (BINDING)
+//         // ============================================================================
+        
+//         // Привязка нажатия на кнопку
+//         submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnSubmitPressed, this);
+        
+//         // Привязка нажатия Enter внутри текстового поля
+//         m_textInput->Bind(wxEVT_TEXT_ENTER, &MyFrame::OnEnterPressed, this);
+// // -------------------------------------
+
+
+
+//         this->SetSizer(sizer);
+//         this->Layout();
+
+//         // Connect the button event to our custom logic handler
+//         Bind(wxEVT_BUTTON, &MyFrame::OnMyButtonClicked, this, ID_BUTTON_CLICKME);
+//         Bind(wxEVT_BUTTON, &MyFrame::OnMyButtonGetIP, this, ID_BUTTON_GETIP);
+
+
+
+//     }
+// };
 
 
 

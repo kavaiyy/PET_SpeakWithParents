@@ -65,6 +65,15 @@ public:
         close(sock);
     }
 
+    int CloseConnection()
+    {
+        // 6. Закрытие сокета
+        close(sock);
+        std::cout << "Соединение закрыто." << std::endl;
+
+        return 0;
+    }
+
     int SendData()
     {
         // 5. Отправка данных (опционально)
@@ -76,14 +85,6 @@ public:
         } else {
             std::cout << "Отправлено байт: " << bytes_sent << std::endl;
         }
-        return 0;
-    }
-    int CloseConnection()
-    {
-        // 6. Закрытие сокета
-        close(sock);
-        std::cout << "Соединение закрыто." << std::endl;
-
         return 0;
     }
 

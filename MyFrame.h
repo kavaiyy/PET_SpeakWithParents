@@ -1,7 +1,7 @@
 #include "UI.h"
 
 
-// #include "MySocket.h"
+#include "MySocket.h"
 // #include "server.h"
 
 
@@ -16,12 +16,14 @@
 class MyFrame : public wxFrame
 {
 private:
+    // UI:
     Panel_1* m_panel1;
     Panel_2* m_panel2;
+    Panel_3* m_panel3;
 
-
-
-
+    // Logic:
+    SocketConnection* OutputConnection;
+    // ServerManager* myServer;
 
     // ---------- ---------------- ----------
     // ---------- FUNCTIONALITY 3: ----------
@@ -53,8 +55,15 @@ public:
         mainSizer->Add(m_panel2, 1, wxEXPAND);
         m_panel2->GetEventButton()->Bind(wxEVT_BUTTON, &MyFrame::OnMyBtnGetIP,      this);
 
+        // Functionality 3
+        m_panel3 = new Panel_3(this);
+        mainSizer->Add(m_panel3, 1, wxEXPAND);
+
+
         SetSizer(mainSizer);
         Layout();
+
+        OutputConnection = new SocketConnection();
 
     }
 
@@ -67,17 +76,19 @@ public:
 
     void OnMyBtnGetIP(wxCommandEvent& event)
     {
+        OutputConnection->SendData();
         std::cout << "MyFrame." << std::endl;
     };
     void OnMyButtonClicked(wxCommandEvent& event)
     {
         // Put whatever you want your app to do when the button is pressed
         // For example, change the text of our label:
-        std::string result = "Hello! Your custom wxWidgets code ran adfdfa.";
+        std::string result = "Hello123! Your custom wxWidgets code ran.";
         // m_panel1->m_Label1->SetLabel("Hello! Your custom wxWidgets code ran adfdfa.");
         // wxString(result);
         m_panel1->ShowText(wxString(result));
-        // internet_connection->SendData();
+
+        OutputConnection->Get_IP();
 
     };
 };
@@ -95,10 +106,10 @@ void MyFrame::OnHello(wxCommandEvent& event)
 };
 void MyFrame::OnExit(wxCommandEvent& event)
 {
-    // internet_connection->CloseConnection();
-    // internet_connection->~SocketConnection();
-    // myServer->~ServerManager();
+    OutputConnection->~SocketConnection();
     Close(true);
+    // internet_connection->CloseConnection();
+    // myServer->~ServerManager();
 };
 
 
@@ -110,14 +121,16 @@ void MyFrame::OnSubmitPressed(wxCommandEvent& event)
 {
     int i;
     i = 1;
+    MyFrame::ProcessSubmittedText();
 };
 void MyFrame::OnEnterPressed(wxCommandEvent& event)
 {
     int i;
     i = 1;
+    MyFrame::ProcessSubmittedText();
 };
 // Единый метод для обработки введенного текста
-void MyFrame::ProcessSubmittedText() 
+void MyFrame::ProcessSubmittedText()
 {
     int i;
     i = 1;
