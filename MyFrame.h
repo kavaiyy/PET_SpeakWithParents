@@ -40,15 +40,16 @@ private:
     void OnExit(wxCommandEvent& event);
 
 public:
-    MyFrame() : wxFrame(nullptr, wxID_ANY, "Basic wxWidgets GUI App", wxPoint(50, 50), wxSize(400, 250))
+    MyFrame() : wxFrame(nullptr, wxID_ANY, "Write to Your Parents", wxPoint(50, 50), wxSize(600, 650)) // wxSize(400, 250)
     {
         // Main container for window
         wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL); // wxHORIZONTAL
 
         // Functionality 1
         m_panel1 = new Panel_1(this);
-        mainSizer->Add(m_panel1, 0, wxEXPAND | wxRIGHT, 2);
+        mainSizer->Add(m_panel1, 1, wxEXPAND | wxRIGHT, 10);
         m_panel1->GetEventButton()->Bind(wxEVT_BUTTON, &MyFrame::OnMyButtonClicked, this);
+        m_panel1->SetBackgroundColour(*wxRED); // Для наглядности
         
         // Functionality 2
         m_panel2 = new Panel_2(this);
@@ -58,11 +59,22 @@ public:
         // Functionality 3
         m_panel3 = new Panel_3(this);
         mainSizer->Add(m_panel3, 1, wxEXPAND);
+        m_panel3->GetEventButton()->Bind(wxEVT_BUTTON,         &MyFrame::OnSubmitPressed,      this);
+        m_panel3->GetEventTextInput()->Bind(wxEVT_TEXT_ENTER,  &MyFrame::OnEnterPressed,       this);
+        m_panel3->SetBackgroundColour(*wxBLUE); // Для наглядности
+
+
+
+        // Привязка нажатия на кнопку
+        // submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnSubmitPressed, this);
+        
+        // Привязка нажатия Enter внутри текстового поля
+        // m_textInput->Bind(wxEVT_TEXT_ENTER, &MyFrame::OnEnterPressed, this);
 
 
         SetSizer(mainSizer);
+        mainSizer->Fit(this);
         Layout();
-
         OutputConnection = new SocketConnection();
 
     }
@@ -73,12 +85,8 @@ public:
     };
 
 
-
-    void OnMyBtnGetIP(wxCommandEvent& event)
-    {
-        OutputConnection->SendData();
-        std::cout << "MyFrame." << std::endl;
-    };
+    // ----------------------------------------------
+    // Functionality 1
     void OnMyButtonClicked(wxCommandEvent& event)
     {
         // Put whatever you want your app to do when the button is pressed
@@ -87,10 +95,18 @@ public:
         // m_panel1->m_Label1->SetLabel("Hello! Your custom wxWidgets code ran adfdfa.");
         // wxString(result);
         m_panel1->ShowText(wxString(result));
-
         OutputConnection->Get_IP();
-
     };
+    // ----------------------------------------------
+    // Functionality 2
+    void OnMyBtnGetIP(wxCommandEvent& event)
+    {
+        OutputConnection->SendData();
+        std::cout << "MyFrame." << std::endl;
+    };
+    // ----------------------------------------------
+    // Functionality 3
+
 };
 
 
@@ -121,12 +137,14 @@ void MyFrame::OnSubmitPressed(wxCommandEvent& event)
 {
     int i;
     i = 1;
+    std::cout << "OnSubmitPressed." << std::endl;
     MyFrame::ProcessSubmittedText();
 };
 void MyFrame::OnEnterPressed(wxCommandEvent& event)
 {
     int i;
     i = 1;
+    std::cout << "OnEnterPressed." << std::endl;
     MyFrame::ProcessSubmittedText();
 };
 // Единый метод для обработки введенного текста
@@ -134,4 +152,5 @@ void MyFrame::ProcessSubmittedText()
 {
     int i;
     i = 1;
+    std::cout << "ProcessSubmittedText." << std::endl;
 };

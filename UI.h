@@ -43,7 +43,7 @@ public:
         // m_btnOpen->Bind(wxEVT_BUTTON, &SidebarPanel::OnOpenPressed, this);
         // m_button_ShowLabel1->Bind(wxEVT_BUTTON, &Panel_1::OnMyButtonClicked, this, ID_BUTTON_CLICKME);
 
-    }
+    };
     wxButton* GetEventButton() const { return m_button_ShowLabel1; };
     int RenderState(const wxString& message);
     int ShowText(const wxString& message);
@@ -123,17 +123,19 @@ public:
 
         // FUNCTIONALITY 3
         // 1. Метка-подсказка
-        m_label_1 = new wxStaticText(this, wxID_ANY, "Введите текст:");
+        // m_label_1 = new wxStaticText(this, wxID_ANY, "Enter text:");
+        // m_label_1 = new wxStaticText(this, wxID_ANY, _("Введите текст:"));
+        m_label_1 = new wxStaticText(this, wxID_ANY, wxString::FromUTF8("Введите текст:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
         PanelSizer->Add(m_label_1, 0, wxALL | wxALIGN_LEFT, 10);
 
         // 2. Поле ввода текста (wxTextCtrl)
-        // Флаг wxTE_PROCESS_ENTER критически важен, чтобы работало нажатие Enter!
-        m_textInput = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+        // Флаг wxTE_PROCESS_ENTER критически важен, чтобы работало нажатие Enter! 
+        m_textInput = new wxTextCtrl(this, wxID_ANY, wxString::FromUTF8("some text"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
         PanelSizer->Add(m_textInput, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
         // m_textInput->Bind(wxEVT_TEXT_ENTER, &MyFrame::OnEnterPressed, this);
 
         // 3. Кнопка отправки
-        m_submitButton = new wxButton(this, wxID_ANY, "Отправить");
+        m_submitButton = new wxButton(this, wxID_ANY, wxString::FromUTF8("Ввести"),wxDefaultPosition, wxSize(200, 40) );
         PanelSizer->Add(m_submitButton, 0, wxALL | wxALIGN_CENTER, 10);
         // m_submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnSubmitPressed, this);
 
@@ -141,7 +143,8 @@ public:
         this->Layout();
     };
 
-    wxButton* GetEventButton() const { return m_submitButton; };
+    wxButton*   GetEventButton()    const { return m_submitButton; };
+    wxTextCtrl* GetEventTextInput() const { return m_textInput;    };
 
 private:
     wxStaticText* m_label_1;
@@ -155,7 +158,10 @@ private:
 };
 
 
-
+// // Для кнопок и статического текста
+// myButton->SetLabel(wxString::FromUTF8("Новый текст на кириллице"));
+// // Для текстовых полей (wxTextCtrl)
+// myTextCtrl->SetValue(wxString::FromUTF8("Введенный текст"));
 
 
 
