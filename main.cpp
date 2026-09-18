@@ -30,3 +30,6 @@ wxIMPLEMENT_APP(MyApp);
 //           ├── [wxTextCtrl (Поле ввода)]
 //           ├── [wxButton (Кнопка)]
 //           └── [wxStaticText (Вывод результата)]
+
+
+// g++ -Wall -Wextra -Wshadow main.cpp -o server : сокрытием имён (name shadowing)

@@ -2,10 +2,7 @@
 
 
 #include "MySocket.h"
-// #include "server.h"
-
-
-
+#include "server.h"
 
 
 
@@ -23,7 +20,7 @@ private:
 
     // Logic:
     SocketConnection* OutputConnection;
-    // ServerManager* myServer;
+    ServerManager* myServer;
 
     // ---------- ---------------- ----------
     // ---------- FUNCTIONALITY 3: ----------
@@ -76,26 +73,32 @@ public:
         mainSizer->Fit(this);
         Layout();
         OutputConnection = new SocketConnection();
+        myServer = new ServerManager();
 
     }
 
     ~MyFrame() 
     {
-
+        OutputConnection->~SocketConnection();
+        myServer->~ServerManager();
     };
 
 
     // ----------------------------------------------
     // Functionality 1
-    void OnMyButtonClicked(wxCommandEvent& event)
+    void OnMyButtonClicked2(wxCommandEvent& event)
     {
-        // Put whatever you want your app to do when the button is pressed
-        // For example, change the text of our label:
         std::string result = "Hello123! Your custom wxWidgets code ran.";
-        // m_panel1->m_Label1->SetLabel("Hello! Your custom wxWidgets code ran adfdfa.");
-        // wxString(result);
         m_panel1->ShowText(wxString(result));
         OutputConnection->Get_IP();
+    };
+    void OnMyButtonClicked(wxCommandEvent& event)
+    {
+        myServer->wait_for_client();
+        myServer->WhatIsClientIP();
+        myServer->clients_msg();
+        std::string result = "After accept function.";
+        m_panel1->ShowText(wxString(result));
     };
     // ----------------------------------------------
     // Functionality 2
@@ -104,9 +107,6 @@ public:
         OutputConnection->SendData();
         std::cout << "MyFrame." << std::endl;
     };
-    // ----------------------------------------------
-    // Functionality 3
-
 };
 
 
@@ -124,6 +124,7 @@ void MyFrame::OnExit(wxCommandEvent& event)
 {
     OutputConnection->~SocketConnection();
     Close(true);
+    std::cout << "OnExit." << std::endl;
     // internet_connection->CloseConnection();
     // myServer->~ServerManager();
 };

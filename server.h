@@ -6,8 +6,6 @@
 
 
 
-
-
 class ServerManager
 {
 public:
@@ -22,7 +20,7 @@ public:
     ServerManager()
     {
         // 1. Создание TCP-сокета
-        int server_id = socket(AF_INET, SOCK_STREAM, 0);
+        server_id = socket(AF_INET, SOCK_STREAM, 0);
         if (server_id < 0) {
             std::cerr << "Ошибка создания сокета сервера!" << std::endl;
             // return 1;
@@ -51,7 +49,7 @@ public:
             close(server_id);
             // return 1;
         };
-        std::cout << "Сервер запущен и слушает порт " << listen_port << "..." << std::endl;
+        std::cout << "Сервер запущен и слушает порт " << listen_port << "..." << server_id << std::endl;
         std::cout << "Ожидание подключения клиента..." << std::endl;
 
     };
@@ -63,13 +61,16 @@ public:
     };
 
 
-    int listen_for_client()
+    int wait_for_client()
     {
         socklen_t addr_len = sizeof(client_address);
-        int client_id = accept(server_id, (struct sockaddr*)&client_address, &addr_len);
+        client_id = accept(server_id, (struct sockaddr*)&client_address, &addr_len);
         
         if (client_id < 0) {
-            std::cerr << "Ошибка принятия подключения (accept)!" << std::endl;
+            std::cerr << "Ошибка принятия подключения (accept)!" << server_id << std::endl;
+
+            std::cerr << "Ошибка принятия подключения (accept)! Код ошибки (errno): " << errno << " (" << std::strerror(errno) << ")" << std::endl;
+
             close(server_id);
             return 1;
         }
