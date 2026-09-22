@@ -56,10 +56,7 @@ private:
     // void Panel_1::OnMyButtonClicked(wxCommandEvent& event)
     void OnMyButtonClicked(wxCommandEvent& event)
     {
-        // Put whatever you want your app to do when the button is pressed
-        // For example, change the text of our label:
         m_Label1->SetLabel("Hello! Your custom wxWidgets code ran adfdfa.");
-
         // internet_connection->SendData();
 
     };

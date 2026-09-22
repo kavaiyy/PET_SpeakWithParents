@@ -32,6 +32,11 @@ private:
     // ---------- ---------------- ----------
     // ---------- ---------------- ----------
 
+    // Обычные методы класса (не нужно никаких специальных макросов)
+    void OnToggleServer(wxCommandEvent& event);     // on/off server
+    void OnClientConnected(wxThreadEvent& event);   // ClientConnected
+
+
     // Defualt events:
     void OnHello(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
@@ -62,6 +67,20 @@ public:
 
 
 
+
+
+        // // 1. Создаем кнопку и передаем ей ID
+        // m_btnToggleServer = new wxButton(this, ID_TOGGLE_SERVER, "Включить сервер");
+
+        // // 2. ДИНАМИЧЕСКАЯ ПРИВЯЗКА КНОПКИ
+        // // Синтаксис: Bind(ТИП_СОБЫТИЯ, &ИМЯ_КЛАССА::ИМЯ_МЕТОДА, объект-обработчик, ID_ВИДЖЕТА)
+        // Bind(wxEVT_BUTTON, &MyFrame::OnToggleServer, this, ID_TOGGLE_SERVER);
+
+        // // 3. ДИНАМИЧЕСКАЯ ПРИВЯЗКА ПОТОКА (Кастомное событие)
+        // // Для событий потока ID не нужен, так как событие идет напрямую к окну (this)
+        // Bind(wxEVT_SERVER_CLIENT_CONNECTED, &MyFrame::OnClientConnected, this);
+
+
         // Привязка нажатия на кнопку
         // submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnSubmitPressed, this);
         
@@ -72,6 +91,8 @@ public:
         SetSizer(mainSizer);
         mainSizer->Fit(this);
         Layout();
+
+        // App logic:
         OutputConnection = new SocketConnection();
         myServer = new ServerManager();
 

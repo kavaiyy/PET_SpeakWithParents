@@ -34,7 +34,7 @@ int main() {
     std::cout << "Успешно подключено к серверу!" << std::endl;
 
     // Отправляем сообщение серверу
-    const char* message = "Привет, Сервер! Я твой клиент.";
+    const char* message = "Привет, Сервер! Я твой клиент. Hali Hali Hali uya";
     send(sock, message, std::strlen(message), 0);
     std::cout << "Сообщение отправлено." << std::endl;
 

@@ -95,7 +95,7 @@ public:
             std::cout << "Получено от клиента: " << buffer << std::endl;
 
             // 6. Отправка ответа клиенту
-            const char* response = "Привет от C++ Сервера! Твое сообщение получено.";
+            const char* response = "Привет от C++ Сервера! I've got your msg. HaliHali";
             send(client_id, response, std::strlen(response), 0);
             std::cout << "Ответ отправлен клиенту." << std::endl;
         }
