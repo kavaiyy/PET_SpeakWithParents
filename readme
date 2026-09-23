@@ -5,11 +5,12 @@
 
         Build on wxWdigets framework.
 
-    main.cpp    - defualt main for wxWdigets.
+    main.cpp    - defualt main for wxWdigets.  ---> main.exe
     MyFrame.cpp - main container/linking class from wxWdigets. Entry point.
     UI.h        - UI elements.
     Server.h    - server class. Logic of the app.
-    client.cpp  - Simple standalone prog for testing Server connection.
     ServerThread.h - Class for managing distinct Thread for Server. (not done yet)
 ///
     MySocket.h  - Old simple vide-coded sokecket connection for learning.
+///
+    client.cpp  - Simple standalone prog for testing Server connection. ---> client.exe

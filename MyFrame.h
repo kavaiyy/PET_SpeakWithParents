@@ -4,7 +4,7 @@
 #include "MySocket.h"
 #include "server.h"
 
-
+#include "ServerThread.h"
 
 
 // ============================================================================
@@ -21,6 +21,12 @@ private:
     // Logic:
     SocketConnection* OutputConnection;
     ServerManager* myServer;
+    ServerThread* mThread = nullptr;
+
+
+
+    void OnMyButtonClicked(wxCommandEvent& event);
+    void OnMyButtonSendMSG(wxCommandEvent& event);
 
     // ---------- ---------------- ----------
     // ---------- FUNCTIONALITY 3: ----------
@@ -29,6 +35,7 @@ private:
     void OnEnterPressed(wxCommandEvent& event);
     // Единый метод для обработки введенного текста
     void ProcessSubmittedText();
+    void OnTogglePressed(wxCommandEvent& event);
     // ---------- ---------------- ----------
     // ---------- ---------------- ----------
 
@@ -40,9 +47,10 @@ private:
     // Defualt events:
     void OnHello(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
+    // void OnClose(wxCommandEvent& event);
 
 public:
-    MyFrame() : wxFrame(nullptr, wxID_ANY, "Write to Your Parents", wxPoint(50, 50), wxSize(600, 650)) // wxSize(400, 250)
+    MyFrame() : wxFrame(nullptr, wxID_ANY, "Write to Your Parents", wxPoint(50, 50), wxSize(1200, 750)) // wxSize(400, 250)
     {
         // Main container for window
         wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL); // wxHORIZONTAL
@@ -56,105 +64,64 @@ public:
         // Functionality 2
         m_panel2 = new Panel_2(this);
         mainSizer->Add(m_panel2, 1, wxEXPAND);
-        m_panel2->GetEventButton()->Bind(wxEVT_BUTTON, &MyFrame::OnMyBtnGetIP,      this);
+        m_panel2->GetEventButton()->Bind(wxEVT_BUTTON, &MyFrame::OnMyButtonSendMSG,      this);
 
         // Functionality 3
         m_panel3 = new Panel_3(this);
         mainSizer->Add(m_panel3, 1, wxEXPAND);
-        m_panel3->GetEventButton()->Bind(wxEVT_BUTTON,         &MyFrame::OnSubmitPressed,      this);
-        m_panel3->GetEventTextInput()->Bind(wxEVT_TEXT_ENTER,  &MyFrame::OnEnterPressed,       this);
+        m_panel3->GetEventButton()->Bind(wxEVT_BUTTON,           &MyFrame::OnSubmitPressed,      this);
+        m_panel3->GetEventTextInput()->Bind(wxEVT_TEXT_ENTER,    &MyFrame::OnEnterPressed,       this);
+        m_panel3->GetToggleServerThreadBtn()->Bind(wxEVT_BUTTON, &MyFrame::OnTogglePressed,      this);
         m_panel3->SetBackgroundColour(*wxBLUE); // Для наглядности
 
-
-
-
-
-        // // 1. Создаем кнопку и передаем ей ID
-        // m_btnToggleServer = new wxButton(this, ID_TOGGLE_SERVER, "Включить сервер");
-
-        // // 2. ДИНАМИЧЕСКАЯ ПРИВЯЗКА КНОПКИ
-        // // Синтаксис: Bind(ТИП_СОБЫТИЯ, &ИМЯ_КЛАССА::ИМЯ_МЕТОДА, объект-обработчик, ID_ВИДЖЕТА)
-        // Bind(wxEVT_BUTTON, &MyFrame::OnToggleServer, this, ID_TOGGLE_SERVER);
-
-        // // 3. ДИНАМИЧЕСКАЯ ПРИВЯЗКА ПОТОКА (Кастомное событие)
-        // // Для событий потока ID не нужен, так как событие идет напрямую к окну (this)
-        // Bind(wxEVT_SERVER_CLIENT_CONNECTED, &MyFrame::OnClientConnected, this);
-
-
-        // Привязка нажатия на кнопку
-        // submitButton->Bind(wxEVT_BUTTON, &MyFrame::OnSubmitPressed, this);
-        
-        // Привязка нажатия Enter внутри текстового поля
-        // m_textInput->Bind(wxEVT_TEXT_ENTER, &MyFrame::OnEnterPressed, this);
-
-
         SetSizer(mainSizer);
-        mainSizer->Fit(this);
+        // mainSizer->Fit(this);
         Layout();
 
         // App logic:
         OutputConnection = new SocketConnection();
         myServer = new ServerManager();
-
+        // mThread = new ServerThread(this, 77);
     }
 
     ~MyFrame() 
     {
         OutputConnection->~SocketConnection();
         myServer->~ServerManager();
-    };
-
-
-    // ----------------------------------------------
-    // Functionality 1
-    void OnMyButtonClicked2(wxCommandEvent& event)
-    {
-        std::string result = "Hello123! Your custom wxWidgets code ran.";
-        m_panel1->ShowText(wxString(result));
-        OutputConnection->Get_IP();
-    };
-    void OnMyButtonClicked(wxCommandEvent& event)
-    {
-        myServer->wait_for_client();
-        myServer->WhatIsClientIP();
-        myServer->clients_msg();
-        std::string result = "After accept function.";
-        m_panel1->ShowText(wxString(result));
-    };
-    // ----------------------------------------------
-    // Functionality 2
-    void OnMyBtnGetIP(wxCommandEvent& event)
-    {
-        OutputConnection->SendData();
-        std::cout << "MyFrame." << std::endl;
+        if (mThread != nullptr) {
+            mThread->~ServerThread();
+        };
     };
 };
 
 
 
-
-
-
-// Event Handler callbacks
-void MyFrame::OnHello(wxCommandEvent& event)
+// // ----------------------------------------------
+// // Panel_1 Functionality
+// // ----------------------------------------------
+void MyFrame::OnMyButtonClicked(wxCommandEvent& event)
 {
-    int buff_OnHello = 3;
-    buff_OnHello = buff_OnHello + 1;
+    // std::string result2 = "Server is ON in main thread and waiting for client to send a message.";
+    // m_panel1->ShowText(wxString(result2));
+    myServer->wait_for_client();
+    myServer->WhatIsClientIP();
+    myServer->clients_msg();
+    std::string result = "Accept function has worked. Message from client is recieved.";
+    m_panel1->ShowText(wxString(result));
 };
-void MyFrame::OnExit(wxCommandEvent& event)
+
+// // ----------------------------------------------
+// // Panel_2 Functionality
+// // ----------------------------------------------
+void MyFrame::OnMyButtonSendMSG(wxCommandEvent& event)
 {
-    OutputConnection->~SocketConnection();
-    Close(true);
-    std::cout << "OnExit." << std::endl;
-    // internet_connection->CloseConnection();
-    // myServer->~ServerManager();
+    OutputConnection->SendData();
+    std::cout << "Hello message is sent to the server 8.8.8.8." << std::endl;
 };
 
-
-// ============================================================================
-// 3. FOR 3 FUNCTIONALITY
-// ============================================================================
-// Обработчики событий
+// // ----------------------------------------------
+// 3. Panel_2 Functionality
+// // ----------------------------------------------
 void MyFrame::OnSubmitPressed(wxCommandEvent& event)
 {
     int i;
@@ -174,5 +141,62 @@ void MyFrame::ProcessSubmittedText()
 {
     int i;
     i = 1;
+    // mThread->Delete();
     std::cout << "ProcessSubmittedText." << std::endl;
+};
+
+void MyFrame::OnTogglePressed(wxCommandEvent& event)
+{
+    if( mThread == nullptr ) {
+        mThread = new ServerThread(this, 77);
+        mThread->Run();
+        std::cout << "GetToggleServerThreadBtn. Runned" << std::endl;
+    } else {
+        mThread->Delete();
+        mThread = nullptr;
+        std::cout << "GetToggleServerThreadBtn. Deleted" << std::endl;
+    }
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Event Handler callbacks
+void MyFrame::OnHello(wxCommandEvent& event)
+{
+    int buff_OnHello = 3;
+    buff_OnHello = buff_OnHello + 1;
+};
+void MyFrame::OnExit(wxCommandEvent& event)
+{
+    OutputConnection->~SocketConnection();
+    Close(true);
+    std::cout << "OnExit." << std::endl;
+    // internet_connection->CloseConnection();
+    // myServer->~ServerManager();
 };

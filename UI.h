@@ -31,10 +31,10 @@ public:
     Panel_1(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-        m_Label1  = new wxStaticText(this, wxID_ANY, "Waiting for action...", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
+        m_Label1  = new wxStaticText(this, wxID_ANY, "Accept socket's function would be called on main thread and wait for client's msg, so UI will freeze.", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
         sizer->Add(m_Label1, 0, wxALL | wxEXPAND, 20);
 
-        m_button_ShowLabel1 = new wxButton(this, ID_BUTTON_CLICKME, "Click Me", wxDefaultPosition, wxSize(200, 40));
+        m_button_ShowLabel1 = new wxButton(this, ID_BUTTON_CLICKME, "Wait for client.cpp msg", wxDefaultPosition, wxSize(240, 40));
         sizer->Add(m_button_ShowLabel1, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
 
         SetSizer(sizer);
@@ -90,10 +90,10 @@ public:
         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
         // FUNCTIONALITY 2
-        m_label_get_IP  = new wxStaticText(this, wxID_ANY, "Result: (IP of server)", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
+        m_label_get_IP  = new wxStaticText(this, wxID_ANY, "Send some data to 8.8.8.8, result in CMD", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
         sizer->Add(m_label_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
         
-        m_button_get_IP = new wxButton(this, ID_BUTTON_GETIP, "Get IP", wxDefaultPosition, wxSize(200, 40));
+        m_button_get_IP = new wxButton(this, ID_BUTTON_GETIP, "Send Hello msg", wxDefaultPosition, wxSize(200, 40));
         sizer->Add(m_button_get_IP, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
 
         SetSizer(sizer);
@@ -106,9 +106,9 @@ private:
     wxStaticText* m_label_get_IP;
     wxButton*     m_button_get_IP;
 
-    void OnMyButtonGetIP(wxCommandEvent& event)
+    void OnMyButtonSendMSG(wxCommandEvent& event)
     {
-        std::cout << "OnMyButtonGetIP." << std::endl;
+        std::cout << "Panel_2: OnMyButtonGetIP." << std::endl;
     };
 };
 
@@ -125,6 +125,14 @@ public:
         m_label_1 = new wxStaticText(this, wxID_ANY, wxString::FromUTF8("Введите текст:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
         PanelSizer->Add(m_label_1, 0, wxALL | wxALIGN_LEFT, 10);
 
+        // 3. Кнопка отправки
+        m_startServerThread = new wxButton(this, wxID_ANY, wxString::FromUTF8("On/Off"),wxDefaultPosition, wxSize(200, 40) );
+        PanelSizer->Add(m_startServerThread, 0, wxALL | wxALIGN_CENTER, 10);
+
+        m_label_ServerIsOn = new wxStaticText(this, wxID_ANY, wxString::FromUTF8("Srever is Off"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL);
+        PanelSizer->Add(m_label_ServerIsOn, 0, wxALL | wxALIGN_LEFT, 10);
+
+
         // 2. Поле ввода текста (wxTextCtrl)
         // Флаг wxTE_PROCESS_ENTER критически важен, чтобы работало нажатие Enter! 
         m_textInput = new wxTextCtrl(this, wxID_ANY, wxString::FromUTF8("some text"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
@@ -140,13 +148,16 @@ public:
         this->Layout();
     };
 
-    wxButton*   GetEventButton()    const { return m_submitButton; };
-    wxTextCtrl* GetEventTextInput() const { return m_textInput;    };
+    wxButton*   GetEventButton()              const { return m_submitButton; };
+    wxButton*   GetToggleServerThreadBtn()    const { return m_startServerThread; };
+    wxTextCtrl* GetEventTextInput()           const { return m_textInput;    };
 
 private:
     wxStaticText* m_label_1;
+    wxStaticText* m_label_ServerIsOn;
     wxTextCtrl*   m_textInput;
     wxButton*     m_submitButton;
+    wxButton*     m_startServerThread;
 
     void OnMyButtonSubmit(wxCommandEvent& event)
     {
