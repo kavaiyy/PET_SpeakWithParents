@@ -14,3 +14,16 @@
     MySocket.h  - Old simple vide-coded sokecket connection for learning.
 ///
     client.cpp  - Simple standalone prog for testing Server connection. ---> client.exe
+
+
+
+    TODO:
+        ServerThread sould be wxTHREAD_JOINABLE. Correct Start/Stop.
+
+        ????????????????
+
+                         What is Right acrhitecture:    
+                                                            ServerThreadControlClass.h (For simple control FROM UI level) 
+                                                                  -----------------> ServerThread.h (All the THREAD technicallity) 
+                                                                                            ---------------------------------------> Server.h  (only server and socket stuff)
+        ????????????????

@@ -10,8 +10,7 @@
 
 
 
-// #include "MySocket.h"
-// #include "server.h"
+
 
 
 // ============================================================================
@@ -78,11 +77,6 @@ int Panel_1::ShowText(const wxString& message)
 
 
 
-
-
-
-
-
 // Panel_2.h
 class Panel_2 : public wxPanel {
 public:
@@ -111,6 +105,9 @@ private:
         std::cout << "Panel_2: OnMyButtonGetIP." << std::endl;
     };
 };
+
+
+
 
 // Panel_3.h
 class Panel_3 : public wxPanel {

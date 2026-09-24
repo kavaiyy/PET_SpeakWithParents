@@ -16,7 +16,7 @@ public:
     // Передаем указатель на окно-обработчик (например, главное окно приложения)
     ServerThread(wxEvtHandler* handler, int port);
     virtual ~ServerThread();
-
+    // void StopAndReleaseThread();
     // int isRunning();
 
 protected:
@@ -29,10 +29,7 @@ private:
 };
 
 
-
-
 // wxDEFINE_EVENT(wxEVT_SERVER_CLIENT_CONNECTED, wxThreadEvent);
-
 ServerThread::ServerThread(wxEvtHandler* handler, int port)
     : wxThread(wxTHREAD_DETACHED), m_handler(handler), m_port(port), m_server_id(-1) {}
 
@@ -41,6 +38,21 @@ ServerThread::~ServerThread() {
     //     close(m_server_id);
     // }
 }
+
+// void ServerThread::StopAndReleaseThread() {
+//     if (m_thread) {
+//         // 1. Будим поток и закрываем сокеты
+//         m_thread->StopServer();
+        
+//         // 2. Ждем физического завершения функции Entry()
+//         m_thread->Wait();
+        
+//         // 3. Безопасно удаляем сам объект потока из памяти
+//         delete m_thread;
+//         m_thread = nullptr;
+//     }
+// }
+
 
 wxThread::ExitCode ServerThread::Entry() {
 

@@ -25,29 +25,27 @@ private:
 
 
 
-    void OnMyButtonClicked(wxCommandEvent& event);
-    void OnMyButtonSendMSG(wxCommandEvent& event);
+    void OnMyButtonClicked(wxCommandEvent& event); // Panel_1
+    void OnMyButtonSendMSG(wxCommandEvent& event); // Panel_2
 
-    // ---------- ---------------- ----------
-    // ---------- FUNCTIONALITY 3: ----------
+    // -------------------------------------
+    //              Panel 3: 
     // Обработчики событий
     void OnSubmitPressed(wxCommandEvent& event);
     void OnEnterPressed(wxCommandEvent& event);
-    // Единый метод для обработки введенного текста
-    void ProcessSubmittedText();
-    void OnTogglePressed(wxCommandEvent& event);
-    // ---------- ---------------- ----------
-    // ---------- ---------------- ----------
+    void ProcessSubmittedText();                 // Единый метод для обработки введенного текста
+    void OnTogglePressed(wxCommandEvent& event); // on/off server
+    // -------------------------------------
 
-    // Обычные методы класса (не нужно никаких специальных макросов)
-    void OnToggleServer(wxCommandEvent& event);     // on/off server
-    void OnClientConnected(wxThreadEvent& event);   // ClientConnected
+    //
+    // void OnToggleServer(wxCommandEvent& event);     // on/off server
+    // void OnClientConnected(wxThreadEvent& event);   // ClientConnected
 
 
     // Defualt events:
     void OnHello(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
-    // void OnClose(wxCommandEvent& event);
+    // void OnClose(wxCommandEvent& event); // CLose App with CROSS
 
 public:
     MyFrame() : wxFrame(nullptr, wxID_ANY, "Write to Your Parents", wxPoint(50, 50), wxSize(1200, 750)) // wxSize(400, 250)
@@ -124,23 +122,17 @@ void MyFrame::OnMyButtonSendMSG(wxCommandEvent& event)
 // // ----------------------------------------------
 void MyFrame::OnSubmitPressed(wxCommandEvent& event)
 {
-    int i;
-    i = 1;
     std::cout << "OnSubmitPressed." << std::endl;
     MyFrame::ProcessSubmittedText();
 };
 void MyFrame::OnEnterPressed(wxCommandEvent& event)
 {
-    int i;
-    i = 1;
     std::cout << "OnEnterPressed." << std::endl;
     MyFrame::ProcessSubmittedText();
 };
 // Единый метод для обработки введенного текста
 void MyFrame::ProcessSubmittedText()
 {
-    int i;
-    i = 1;
     // mThread->Delete();
     std::cout << "ProcessSubmittedText." << std::endl;
 };
