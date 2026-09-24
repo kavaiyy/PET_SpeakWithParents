@@ -22,8 +22,10 @@
 
         ????????????????
 
-                         What is Right acrhitecture:    
-                                                            ServerThreadControlClass.h (For simple control FROM UI level) 
-                                                                  -----------------> ServerThread.h (All the THREAD technicallity) 
-                                                                                            ---------------------------------------> Server.h  (only server and socket stuff)
+    What is Right acrhitecture:    
+
+        ServerThreadControlClass.h (For simple control FROM UI level) 
+            ----> ServerThread.h (All the THREAD technicallity) 
+                ----> Server.h  (only server and socket stuff)
+
         ????????????????
