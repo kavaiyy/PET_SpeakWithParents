@@ -6,7 +6,7 @@
 
 
 
-class ServerManager
+class SocketManager
 {
 public:
     int server_id;
@@ -17,7 +17,7 @@ public:
     sockaddr_in client_address;
 
 
-    ServerManager()
+    SocketManager()
     {
         // 1. Создание TCP-сокета
         server_id = socket(AF_INET, SOCK_STREAM, 0);
@@ -53,11 +53,11 @@ public:
         std::cout << "Ожидание подключения клиента..." << std::endl;
 
     };
-    ~ServerManager()
+    ~SocketManager()
     {
         close(server_id);
         close(client_id);
-        std::cout << "Destructor: ServerManager object.\n";
+        std::cout << "SocketManager Destructor.\n";
     };
 
 

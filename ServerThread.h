@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+#include "ServerSocketManeger.h"
+
 // Объявляем уникальный ID для события "Клиент подключился"
 // wxDECLARE_EVENT(wxEVT_SERVER_CLIENT_CONNECTED, wxThreadEvent);
 
@@ -26,37 +28,28 @@ private:
     wxEvtHandler* m_handler;
     int m_port;
     int m_server_id;
+    SocketManager* m_socketManager = nullptr;
 };
 
 
 // wxDEFINE_EVENT(wxEVT_SERVER_CLIENT_CONNECTED, wxThreadEvent);
 ServerThread::ServerThread(wxEvtHandler* handler, int port)
-    : wxThread(wxTHREAD_DETACHED), m_handler(handler), m_port(port), m_server_id(-1) {}
-
+    : wxThread(wxTHREAD_JOINABLE), m_handler(handler), m_port(port), m_server_id(-1)  // : wxThread(wxTHREAD_DETACHED)
+    {
+        m_socketManager = new SocketManager();
+    }
+// Destructor will be called when method Delete is called.
 ServerThread::~ServerThread() {
-    // if (m_server_id != -1) {
-    //     close(m_server_id);
-    // }
+    if(m_socketManager != nullptr) {
+        m_socketManager->~SocketManager();
+    }
+    std::cout << "ServerThread Destructor." << std::endl;
 }
-
-// void ServerThread::StopAndReleaseThread() {
-//     if (m_thread) {
-//         // 1. Будим поток и закрываем сокеты
-//         m_thread->StopServer();
-        
-//         // 2. Ждем физического завершения функции Entry()
-//         m_thread->Wait();
-        
-//         // 3. Безопасно удаляем сам объект потока из памяти
-//         delete m_thread;
-//         m_thread = nullptr;
-//     }
-// }
 
 
 wxThread::ExitCode ServerThread::Entry() {
 
-    std::cout << "Thread is luanched." << std::endl;
+    std::cout << "Thread is luanched.\n" << std::endl;
     while (!TestDestroy()) {
         
     }
@@ -76,6 +69,21 @@ wxThread::ExitCode ServerThread::Entry() {
 
 
 
+
+
+// void ServerThread::StopAndReleaseThread() {
+//     if (m_thread) {
+//         // 1. Будим поток и закрываем сокеты
+//         m_thread->StopServer();
+        
+//         // 2. Ждем физического завершения функции Entry()
+//         m_thread->Wait();
+        
+//         // 3. Безопасно удаляем сам объект потока из памяти
+//         delete m_thread;
+//         m_thread = nullptr;
+//     }
+// }
 
 
 

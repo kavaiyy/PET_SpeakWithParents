@@ -1,10 +1,9 @@
 #include "UI.h"
 
-
 #include "MySocket.h"
-#include "server.h"
+// #include "ServerSocketManeger.h"
 
-#include "ServerThread.h"
+#include "ServerControl.h"
 
 
 // ============================================================================
@@ -20,8 +19,9 @@ private:
 
     // Logic:
     SocketConnection* OutputConnection;
-    ServerManager* myServer;
-    ServerThread* mThread = nullptr;
+    ServerControl* mServerControl;
+    SocketManager* myServer;
+    // ServerThread* mThread = nullptr;
 
 
 
@@ -78,17 +78,19 @@ public:
 
         // App logic:
         OutputConnection = new SocketConnection();
-        myServer = new ServerManager();
+        myServer = new SocketManager();
         // mThread = new ServerThread(this, 77);
+        mServerControl = new ServerControl(this, 77);
     }
 
     ~MyFrame() 
     {
         OutputConnection->~SocketConnection();
-        myServer->~ServerManager();
-        if (mThread != nullptr) {
-            mThread->~ServerThread();
-        };
+        mServerControl->~ServerControl();
+        myServer->~SocketManager();
+        // if (mThread != nullptr) {
+        //     mThread->~ServerThread();
+        // };
     };
 };
 
@@ -139,16 +141,13 @@ void MyFrame::ProcessSubmittedText()
 
 void MyFrame::OnTogglePressed(wxCommandEvent& event)
 {
-    if( mThread == nullptr ) {
-        mThread = new ServerThread(this, 77);
-        mThread->Run();
-        std::cout << "GetToggleServerThreadBtn. Runned" << std::endl;
-    } else {
-        mThread->Delete();
-        mThread = nullptr;
+    if( mServerControl->isRunning() ) {
+        mServerControl->stopServer();
         std::cout << "GetToggleServerThreadBtn. Deleted" << std::endl;
+    } else {
+        mServerControl->startServer();
+        std::cout << "GetToggleServerThreadBtn. Runned" << std::endl;
     }
-
 };
 
 
