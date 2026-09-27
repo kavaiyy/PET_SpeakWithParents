@@ -36,7 +36,7 @@ private:
 ServerThread::ServerThread(wxEvtHandler* handler, int port)
     : wxThread(wxTHREAD_JOINABLE), m_handler(handler), m_port(port), m_server_id(-1)  // : wxThread(wxTHREAD_DETACHED)
     {
-        m_socketManager = new SocketManager();
+        m_socketManager = new SocketManager(m_port);
     }
 // Destructor will be called when method Delete is called.
 ServerThread::~ServerThread() {
@@ -51,7 +51,9 @@ wxThread::ExitCode ServerThread::Entry() {
 
     std::cout << "Thread is luanched.\n" << std::endl;
     while (!TestDestroy()) {
-        
+        m_socketManager->wait_for_client();
+        // m_socketManager->WhatIsClientIP();
+        // m_socketManager->clients_msg();
     }
     std::cout << "Thread is closed." << std::endl;
 

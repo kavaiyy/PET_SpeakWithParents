@@ -17,8 +17,9 @@ public:
     sockaddr_in client_address;
 
 
-    SocketManager()
+    SocketManager(int vv_listen_port)
     {
+        listen_port = vv_listen_port;
         // 1. Создание TCP-сокета
         server_id = socket(AF_INET, SOCK_STREAM, 0);
         if (server_id < 0) {
@@ -50,7 +51,7 @@ public:
             // return 1;
         };
         std::cout << "Сервер запущен и слушает порт " << listen_port << "..." << server_id << std::endl;
-        std::cout << "Ожидание подключения клиента..." << std::endl;
+        std::cout << "Ожидание подключения клиента...\n\n" << std::endl;
 
     };
     ~SocketManager()

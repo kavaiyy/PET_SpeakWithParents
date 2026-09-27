@@ -6,7 +6,8 @@
 
 int main() {
     const char* server_ip = "127.0.0.1"; // Локальный адрес (IP самого себя)
-    int server_port = 8080;
+    // int server_port = 8080;
+    int server_port = 8083;
 
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {

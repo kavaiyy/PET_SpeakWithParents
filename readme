@@ -17,7 +17,21 @@
 
 
 
-    TODO:
+
+
+
+    TODO 2:
+            ServerSocketMeneger - to do.
+            Send several messages and recieve them - to do
+            Output msgs to console.
+            Output msgs to UI ?
+            Integrate client into Arhitecture ???
+
+            
+
+            OpenGL run on Qt ???
+
+    TODO 1:
         ServerThread sould be wxTHREAD_JOINABLE. Correct Start/Stop.
 
         ????????????????
@@ -27,5 +41,13 @@
         ServerThreadControlClass.h (For simple control FROM UI level) 
             ----> ServerThread.h (All the THREAD technicallity) 
                 ----> Server.h  (only server and socket stuff)
+
+        DONE
+
+
+    Главное окно ──> владеет ──> ServerManager ──> владеет ──> wxThread
+                            or
+    Главное окно ──> владеет ──> wxThread ──> владеет ──> ServerManager
+
 
         ????????????????

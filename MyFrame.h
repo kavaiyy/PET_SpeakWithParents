@@ -1,9 +1,9 @@
 #include "UI.h"
 
 #include "MySocket.h"
-// #include "ServerSocketManeger.h"
 
 #include "ServerControl.h"
+// #include "ServerSocketManeger.h"
 
 
 // ============================================================================
@@ -78,9 +78,9 @@ public:
 
         // App logic:
         OutputConnection = new SocketConnection();
-        myServer = new SocketManager();
+        myServer = new SocketManager(8080);
         // mThread = new ServerThread(this, 77);
-        mServerControl = new ServerControl(this, 77);
+        mServerControl = new ServerControl(this, 8083);
     }
 
     ~MyFrame() 
